@@ -1,0 +1,39 @@
+package com.kenshin0707.bots.utils;
+
+import com.runemate.game.api.hybrid.local.hud.interfaces.Bank;
+import com.runemate.game.api.hybrid.local.hud.interfaces.Inventory;
+
+/**
+ * Created by Jeremy on 7/19/2019.
+ */
+public  class bank {
+    public static String state ="";
+    public static void setState(String newState){
+        state = newState;
+    }
+    public static String execute(String action, String item, int quantity){
+        if(action.equals("banking")){
+            if(Bank.isOpen()){
+                switch(state){
+                    case "withdraw":
+                        Bank.withdraw(item, quantity);
+                        setState("");
+                        break;
+                    case "deposit":
+                        Bank.depositInventory();
+                        if(Inventory.getItems().size() != 28){
+                            setState("");
+                        }
+
+                        break;
+                    default:
+                        Bank.close();
+                        return "walking";
+                }
+            }else{
+                Bank.open();
+            }
+        }
+        return action;
+    }
+}

@@ -1,0 +1,33 @@
+package com.kenshin0707.bots.utils;
+import com.runemate.game.api.hybrid.entities.Player;
+import com.runemate.game.api.hybrid.location.Coordinate;
+import com.runemate.game.api.hybrid.location.navigation.Traversal;
+import com.runemate.game.api.hybrid.location.navigation.web.WebPath;
+import com.runemate.game.api.hybrid.location.navigation.web.WebPathBuilder;
+import com.runemate.game.api.hybrid.region.Players;
+import com.runemate.game.api.script.framework.tree.LeafTask;
+
+/**
+ * Created by Jeremy on 7/19/2019.
+ */
+public class pathing extends LeafTask {
+    @Override
+    public void execute() {
+
+    }
+    public void moveTo(Coordinate coord){
+        try{
+            Player player = Players.getLocal();
+            System.out.println("Moving from [" +
+                       "X: " + player.getPosition().getX() +
+                       " Y: " + player.getPosition().getY()+"] => " +
+                    "[X: " + coord.getX() + " Y: "+ coord.getY());
+            WebPathBuilder pathing = Traversal.getDefaultWeb().getPathBuilder();
+            WebPath path = pathing.buildTo(coord);
+            path.step();
+        }catch(Exception ie){
+            String result = "Error Pathing";
+        }
+
+    }
+}

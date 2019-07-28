@@ -1,0 +1,96 @@
+package com.kenshin0707.bots.mining;
+
+import com.kenshin0707.bots.mining.display.displayController;
+import com.kenshin0707.bots.mining.presets.mining.mining;
+import com.runemate.game.api.client.embeddable.EmbeddableUI;
+import com.runemate.game.api.hybrid.local.Skill;
+import com.runemate.game.api.script.framework.LoopingBot;
+import com.runemate.game.api.script.framework.core.LoopingThread;
+import com.runemate.game.api.script.framework.listeners.InventoryListener;
+import com.runemate.game.api.script.framework.listeners.events.ItemEvent;
+import com.sun.glass.ui.InvokeLaterDispatcher;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * Created by Jeremy on 7/19/2019.
+ */
+public class main extends LoopingBot implements InventoryListener, EmbeddableUI {
+
+    public mining startScript;
+    public boolean isRunning = false;
+    public displayController _displayController;
+    private ObjectProperty<Node> botInterfaceProperty;
+    private Thread thread;
+    public main(){
+        this.startScript = new mining();
+        setEmbeddableUI(this);
+
+    }
+    @Override
+    public void onStart(String[] args){
+        if(botInterfaceProperty == null ) botInterfaceProperty();
+        this.getEventDispatcher().addListener(this);
+        this.getEventDispatcher().addListener(new InventoryListener() {
+            @Override
+            public void onItemAdded(ItemEvent event) {
+                startScript.itemAdded(event);
+            }
+            @Override
+            public  void onItemRemoved(ItemEvent event){
+                startScript.itemRemoved(event);
+            }
+        });
+    }
+    @Override
+    public void onLoop() {
+        if(isRunning){
+            startScript.run();
+            startScript.Execute();
+            int mining = Skill.MINING.getCurrentLevel();
+            long exp = Skill.MINING.getExperience();
+            String action = startScript.action;
+            int total = startScript.totalMine;
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    _displayController.currentLvl.setText(mining+"");
+                    _displayController.currentAction.setText(action);
+                    _displayController.totalMine.setText(total+" Ores(s)");
+                    _displayController.exp.setText(exp+" exp");
+                }
+            });
+        }
+
+    }
+
+    public void setOre(String ore){
+        this.startScript.selectedPreset.selectedOre = ore;
+    }
+
+    @Override
+    public ObjectProperty<? extends Node> botInterfaceProperty() {
+        if(botInterfaceProperty == null){
+            FXMLLoader loader = new FXMLLoader();
+            _displayController = new displayController(this);
+            loader.setController(_displayController);
+            try {
+                InputStream st = new FileInputStream("out/production/RuneMate/com/kenshin0707/bots/mining/display/gui.fxml");
+                Node node = loader.load(st);
+                botInterfaceProperty = new SimpleObjectProperty<>(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return botInterfaceProperty;
+    }
+
+
+}

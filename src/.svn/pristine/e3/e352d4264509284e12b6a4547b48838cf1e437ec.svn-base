@@ -1,0 +1,25 @@
+package com.kenshin0707.bots.mining.presets.mining;
+
+import com.kenshin0707.bots.mining.presets.point;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+public class mining_preset {
+    public String name;
+    public ArrayList<String>  ores = new ArrayList<String>();
+    public ArrayList<point> straightPath = new ArrayList<point>();
+    public String selectedOre = "Tin ore";
+    public mining_preset(Object obj){
+        name = ((JSONObject)obj).get("name").toString();
+        for(Object ore: (JSONArray)((JSONObject)obj).get("ores")){
+            ores.add(ore.toString());
+        }
+        for(Object p: (JSONArray)((JSONObject)obj).get("straightPath")){
+            JSONObject o = (JSONObject)p;
+            point pt = new point(o.getInt("x"),o.getInt("y"),o.getInt("plane"));
+            straightPath.add(pt);
+        }
+    }
+}

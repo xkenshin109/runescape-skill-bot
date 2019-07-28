@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="599.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane prefHeight="400.0" prefWidth="599.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab text="Setup">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="225.0" layoutY="118.0" prefHeight="30.0" prefWidth="149.0" text="Location" textAlignment="CENTER" />
+                        <ComboBox id="locationList" fx:id="locationList" layoutX="190.0" layoutY="148.0" prefHeight="25.0" prefWidth="220.0" />
+
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="225.0" layoutY="186.0" prefHeight="30.0" prefWidth="149.0" text="Item to be Farmed" textAlignment="CENTER" />
+                        <ComboBox id="farmingList" fx:id="farmingList" layoutX="189.0" layoutY="216.0" prefHeight="25.0" prefWidth="225.0" />
+                        <Button id="start" fx:id="start" layoutX="224.0" layoutY="282.0" prefHeight="25.0" prefWidth="148.0" text="Start" />
+                        <ComboBox id="skillList" fx:id="skillList" layoutX="192.0" layoutY="93.0" prefHeight="25.0" prefWidth="215.0" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="225.0" layoutY="63.0" prefHeight="30.0" prefWidth="149.0" text="Skill" textAlignment="CENTER" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Progress Details">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView id="sessionLogs" fx:id="sessionLogs" layoutX="9.0" layoutY="112.0" prefHeight="245.0" prefWidth="581.0" />
+                        <Label layoutX="21.0" layoutY="22.0" text="Current Lvl:" />
+                        <Label id="currentLvl" fx:id="currentLvl" contentDisplay="RIGHT" layoutX="117.0" layoutY="22.0" text="0" />
+                        <Label id="total" fx:id="total" contentDisplay="RIGHT" layoutX="117.0" layoutY="55.0" text="0" />
+                        <Label layoutX="18.0" layoutY="55.0" text="Total Farmed:" />
+                        <Label id="exp" fx:id="exp" contentDisplay="RIGHT" layoutX="332.0" layoutY="22.0" text="0" />
+                        <Label layoutX="236.0" layoutY="22.0" text="Experience" />
+                        <Label layoutX="236.0" layoutY="55.0" text="Current Action" />
+                        <Label id="currentAction" fx:id="currentAction" contentDisplay="RIGHT" layoutX="332.0" layoutY="55.0" text="0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</VBox>

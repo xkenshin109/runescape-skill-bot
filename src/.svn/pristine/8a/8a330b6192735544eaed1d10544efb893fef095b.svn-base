@@ -1,0 +1,20 @@
+package com.kenshin0707.bots.master;
+
+import com.runemate.game.api.hybrid.region.Players;
+import com.runemate.game.api.script.framework.LoopingBot;
+
+import java.util.Timer;
+
+public class main extends LoopingBot {
+
+    @Override
+    public void onLoop() {
+
+    }
+
+    @Override
+    public void onStart(String[] args){
+
+
+    }
+}

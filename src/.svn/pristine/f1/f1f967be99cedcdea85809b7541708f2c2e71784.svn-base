@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="599.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane prefHeight="400.0" prefWidth="599.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Setup">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="209.0" layoutY="44.0" prefHeight="30.0" prefWidth="149.0" text="Select area to mine:" textAlignment="CENTER" />
+                  <ComboBox id="areaList" fx:id="areaList" layoutX="209.0" layoutY="74.0" prefWidth="150.0" />
+
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="209.0" layoutY="123.0" prefHeight="30.0" prefWidth="149.0" text="Select ore to mine:" textAlignment="CENTER" />
+                  <ComboBox id="oreList" fx:id="oreList" layoutX="209.0" layoutY="153.0" prefWidth="150.0" />
+                    <Button id="start" fx:id="start" layoutX="208.0" layoutY="208.0" prefHeight="25.0" prefWidth="148.0" text="Start" />
+                </children>
+              </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Progress Details">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView id="sessionLogs" fx:id="sessionLogs" layoutX="9.0" layoutY="112.0" prefHeight="245.0" prefWidth="581.0" />
+                        <Label layoutX="21.0" layoutY="22.0" text="Current Lvl:" />
+                        <Label id="currentLvl" fx:id="currentLvl" contentDisplay="RIGHT" layoutX="117.0" layoutY="22.0" text="0" />
+                        <Label id="totalMine" fx:id="totalMine" contentDisplay="RIGHT" layoutX="117.0" layoutY="55.0" text="0" />
+                        <Label layoutX="18.0" layoutY="55.0" text="Total Ore Mined:" />
+                        <Label id="currentLvl" fx:id="exp" contentDisplay="RIGHT" layoutX="332.0" layoutY="22.0" text="0" />
+                        <Label layoutX="236.0" layoutY="22.0" text="Experience" />
+                        <Label layoutX="236.0" layoutY="55.0" text="Current Action" />
+                        <Label id="currentLvl" fx:id="currentAction" contentDisplay="RIGHT" layoutX="332.0" layoutY="55.0" text="0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</VBox>

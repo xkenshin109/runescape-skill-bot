@@ -1,0 +1,12 @@
+<manifest>
+    <main-class>com.kenshin0707.bots.master.main</main-class>
+    <name>Master Bot</name>
+    <description>Master Account that you can tie handle trading multiple accounts. In case your in fear of being banned.</description>
+    <version>0.0.1</version>
+    <compatibility>
+        <game-type>OSRS</game-type>
+    </compatibility>
+    <categories>
+        <category>MINING</category>
+    </categories>
+</manifest>

@@ -1,0 +1,16 @@
+package com.kenshin0707.bots.mining;
+
+
+import com.runemate.game.api.client.ClientUI;
+import com.runemate.game.api.script.framework.AbstractScript;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import javax.swing.*;
+
+public class styledGui extends Stage {
+    public styledGui(String title, final AbstractScript script){
+        super(StageStyle.UNDECORATED);
+        this.setTitle(title);
+    }
+}

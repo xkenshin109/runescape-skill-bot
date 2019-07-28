@@ -1,0 +1,45 @@
+{
+  "locations": [
+    {
+      "name": "Draynor - Yews/Oaks/Logs",
+      "trees": [
+        "Logs",
+        "Oak logs",
+        "Yew logs",
+        "All"
+      ],
+      "route": [
+        {
+          "x": 3094,
+          "y": 3249,
+          "plane": 0
+        },
+        {
+          "x": 3105,
+          "y": 3252,
+          "plane": 0
+        },
+        {
+          "x": 3110,
+          "y": 3254,
+          "plane": 0
+        },
+        {
+          "x": 3125,
+          "y": 3263,
+          "plane": 0
+        },
+        {
+          "x": 3145,
+          "y": 3254,
+          "plane": 0
+        },
+        {
+          "x": 3147,
+          "y": 3246,
+          "plane": 0
+        }
+      ]
+    }
+  ]
+}

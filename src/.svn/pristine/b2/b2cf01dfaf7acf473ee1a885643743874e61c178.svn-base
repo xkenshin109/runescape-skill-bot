@@ -1,0 +1,190 @@
+package com.kenshin0707.bots.mining.presets.mining;
+
+import com.kenshin0707.bots.utils.bank;
+import com.runemate.game.api.hybrid.entities.GameObject;
+import com.runemate.game.api.hybrid.entities.Player;
+import com.runemate.game.api.hybrid.entities.definitions.GameObjectDefinition;
+import com.runemate.game.api.hybrid.local.hud.interfaces.Inventory;
+import com.runemate.game.api.hybrid.location.Area;
+import com.runemate.game.api.hybrid.location.Coordinate;
+import com.runemate.game.api.hybrid.location.navigation.Traversal;
+import com.runemate.game.api.hybrid.location.navigation.web.WebPath;
+import com.runemate.game.api.hybrid.location.navigation.web.WebPathBuilder;
+import com.runemate.game.api.hybrid.region.GameObjects;
+import com.runemate.game.api.hybrid.region.Players;
+import com.runemate.game.api.script.framework.listeners.InventoryListener;
+import com.runemate.game.api.script.framework.listeners.events.ItemEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.awt.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+
+public class mining implements InventoryListener{
+    public ArrayList<mining_preset> preset = new ArrayList<mining_preset>();
+    public mining_preset selectedPreset;
+    public GameObject currentOreMining;
+    public String action = "walking";
+    public Coordinate bankArea, miningArea;
+    public int pointer = 0, direction = 1;
+    public Dictionary<String, Map<Color,Color>> oreMappings = new Hashtable<>();
+    public boolean loaded = false;
+    private static int MINING_ANIMATION_ID = 625;
+    public mining(){
+        ReadFile();
+    }
+    public mining_preset selectPreset(String areaName){
+        int start =0, end =preset.size()-1;
+        while(start <= end){
+            if(preset.get(start).name.equals(areaName)){
+                return selectedPreset = preset.get(start);
+            }
+            if(preset.get(end).name.equals(areaName)){
+                return selectedPreset = preset.get(end);
+            }
+            start++;
+            end--;
+        }
+        return selectedPreset;
+    }
+    public void run(){
+        if(loaded) return;
+        loaded = true;
+        setupAreas();
+        findClosestPath();
+    }
+    public void setupAreas(){
+        if(selectedPreset == null) return;
+        bankArea = this.selectedPreset.straightPath.get(0).coordinate();
+        miningArea = this.selectedPreset.straightPath.get(this.selectedPreset.straightPath.size() - 1).coordinate();
+
+    }
+    public boolean ReadFile(){
+        try{
+            String text = new String(Files.readAllBytes(Paths.get("out/production/RuneMate/com/kenshin0707/bots/mining/presets/mining/varrock-mining-south-east.txt")));
+            JSONObject object = new JSONObject(text);
+            for(Object obj: (JSONArray)object.get("locations")){
+                mining_preset temp = new mining_preset(obj);
+                preset.add(temp);
+            }
+            oreMappings.put("Tin ore", new HashMap<>());
+            oreMappings.get("Tin ore").put(new Color(48,48,48),new Color(106,106,106));
+            oreMappings.put("Copper ore",new HashMap<>());
+            oreMappings.get("Copper ore").put(new Color(48,48,48), new Color(74,48,32));
+            oreMappings.put("Iron ore",new HashMap<>());
+            oreMappings.get("Iron ore").put(new Color(48,48,48), new Color(32,17,14));
+            setupAreas();
+            return true;
+        }catch(Exception ie){
+            System.out.println("Could not find the file");
+            return false;
+        }
+    }
+    public void Execute(){
+        Player player = Players.getLocal();
+        if(player.getPosition() != null){
+            if(bankArea.getArea().grow(6,6).contains(player,true) && Inventory.getItems().size() == 28 && !action.equals("banking")){
+                //We entered the Bank Area. So we need to trigger the Bank Workflow by setting the main functions action
+                action = "banking";
+                pointer = 0;
+                direction = 1;
+                bank.setState("deposit");
+
+            }else if(miningArea.getArea().grow(15,15).contains(player,true)  && Inventory.getItems().size() < 28 && !action.equals("mining")){
+                action = "mining";
+                pointer = selectedPreset.straightPath.size() -1;
+                direction *= -1;
+            }else{
+                run();
+                walk();
+                startMining();
+                action = bank.execute(action,selectedPreset.selectedOre,28);
+            }
+        }
+    }
+    public void findClosestPath(){
+        int ptr = 0;
+        int start = 0,end = selectedPreset.straightPath.size()-1;
+        Player p = Players.getLocal();
+        while(start<= end){
+            if(p.distanceTo(selectedPreset.straightPath.get(start).coordinate()) <
+                    p.distanceTo(selectedPreset.straightPath.get(ptr).coordinate())){
+                ptr = start;
+            }
+            if(p.distanceTo(selectedPreset.straightPath.get(end).coordinate()) <
+                    p.distanceTo(selectedPreset.straightPath.get(ptr).coordinate())){
+                ptr = end;
+            }
+            start++;
+            end--;
+        }
+        if(Inventory.getItems().size() < 28){
+            direction = 1;
+        }else if(Inventory.getItems().size() == 28){
+            direction = -1;
+        }else if(Inventory.contains("Bronze pickaxe")){
+            //This will be a check before others to see if the equipment is on
+            direction = 1;
+        }
+
+
+        pointer = ptr;
+    }
+    public void walk(){
+        if(!action.equals("walking")) return;
+        Player player = Players.getLocal();
+        Area ptrArea = selectedPreset.straightPath.get(pointer).coordinate().getArea().grow(5,5);
+        if(ptrArea.contains(player)){
+            pointer += direction;
+            if(pointer > selectedPreset.straightPath.size()-1) {
+                pointer = selectedPreset.straightPath.size()-1;
+            }
+            if(pointer < 0){
+                pointer = 0;
+            }
+
+        }else if(this.selectedPreset.straightPath.size() > 0){
+            WebPathBuilder pathBuilder = Traversal.getDefaultWeb().getPathBuilder();
+            WebPath path = pathBuilder.buildTo(selectedPreset.straightPath.get(pointer).coordinate());
+            path.step();
+        }else{
+            System.out.println("");
+        }
+    }
+    public void startMining(){
+        if(!action.equals("mining")) return;
+        if(Inventory.getItems().size() == 28) {
+            action = "walking";
+            return;
+        }
+        Player player = Players.getLocal();
+        if(currentOreMining == null){
+            currentOreMining = GameObjects
+                    .newQuery()
+                    .colorSubstitutions(oreMappings.get(selectedPreset.selectedOre))
+                    .actions("Mine").within(player.getArea().grow(15,15)).results().nearest();
+            GameObjectDefinition def = currentOreMining.getDefinition();
+            currentOreMining.interact("Mine");
+        }else
+        if(player.getAnimationId() != MINING_ANIMATION_ID && currentOreMining != null){
+            currentOreMining = null;
+            System.out.println("Waiting for ore..but seems to of gotten stuck..should be fixed");
+        }
+        System.out.println(player.getAnimationId());
+    }
+
+    public void itemAdded(ItemEvent item){
+
+        if(item.getItem().getDefinition().getName().equals(selectedPreset.selectedOre)){
+            System.out.println("ADDED: " + item.getItem());
+            currentOreMining = null;
+        }
+    }
+    public void itemRemoved(ItemEvent item){
+        System.out.println("REMOVED: " + item.getItem());
+    }
+}
+

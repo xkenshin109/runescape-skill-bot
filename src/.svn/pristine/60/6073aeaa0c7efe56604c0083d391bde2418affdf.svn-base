@@ -1,0 +1,23 @@
+<manifest>
+    <main-class>com.kenshin0707.bots.mining.main</main-class>
+    <name>Mining Minion</name>
+    <description>First Bot and many more to come.</description>
+    <version>0.0.1</version>
+    <tag-line>First Bot, more updates to come</tag-line>
+    <compatibility>
+        <game-type>OSRS</game-type>
+    </compatibility>
+    <categories>
+        <category>MINING</category>
+    </categories>
+    <internal-id>KenshinMiner</internal-id>
+    <hidden>true</hidden>
+    <access>public</access>
+    <tags>
+        mining
+    </tags>
+    <resources>
+        <resource>out/production/RuneMate/com/kenshin0707/bots/mining/presets/mining/varrock-mining-south-east.txt</resource>
+        <resource>out/production/RuneMate/com/kenshin0707/bots/mining/display/gui.fxml</resource>
+    </resources>
+</manifest>
